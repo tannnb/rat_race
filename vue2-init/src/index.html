@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app"></div>
+  <script src="../dist/vue.js"></script>
+  <script>
+    var vm = new Vue({
+      el:'#app',
+      data:{
+        id:10000,
+        message:'hello Vue',
+        address:{
+          room:'CD'
+        }
+      }
+    })
+    vm._data.address = {...vm._data.address, a:'100'}
+    console.log(vm._data);
+  </script>
+</body>
+</html>
