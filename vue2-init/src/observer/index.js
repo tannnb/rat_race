@@ -1,13 +1,38 @@
 
+
+import { proto } from './array';
+
+
 class Observer {
   constructor(value) {
-    // 将用户传入的选项 循环重写
-    this.walk(value)
+
+    // 给当前调用者挂载一个Observer实例
+    Object.defineProperty(value, '__ob__', {
+      enumerable: false, // 在后续循环中不可枚举的属性不能被循环出来，否则会死循环
+      value: this
+    })
+    
+    if (Array.isArray(value)) {
+      // 如果data中的key的value是数组:[value,value,...]，为了良好性能不对数组中的每一项进行数据观测，而是重写shift unshift pop push 等方法
+      value.__proto__ = proto
+
+      // 如果数组里放的是对象类型: [{key:value}],
+      this.observerArray(value)
+
+    } else {
+      // 将用户传入的选项 循环重写
+      this.walk(value)
+    }
   }
   walk (target) {
     Object.keys(target).forEach(key => {
       defineReactive(target, key, target[key])
     })
+  }
+  observerArray (target) {
+    for (let i = 0; i < target.length; i++) {
+      observer(target[i])
+    }
   }
 }
 
@@ -22,7 +47,7 @@ function defineReactive (target, key, value) {
       return value
     },
     set (newValue) {
-      if(newValue === value) return
+      if (newValue === value) return
 
       // 如果设置的值是对象，那么就再次调用ovserver让对象变成响应式
       observer(newValue)
@@ -39,6 +64,11 @@ export function observer (data) {
   // 如果不是对象或者为null，没意义不观测
   if (typeof data !== 'object' || data === null) {
     return
+  }
+
+  // 如果一个数据有__ob__说明已经被观测过了
+  if(data.__ob__) {
+    return 
   }
 
   return new Observer(data)
