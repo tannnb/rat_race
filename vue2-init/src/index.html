@@ -7,12 +7,14 @@
   <title>Document</title>
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app" age=18 name='Tom'>hello {{ kuangjia }} <span>{{time}}</span> </div>
   <script src="../dist/vue.js"></script>
   <script>
     var vm = new Vue({
       el:'#app',
       data:{
+        kuangjia:'Vue',
+        time:'2022',
         id:10000,
         message:'hello Vue',
         address:{
@@ -23,7 +25,7 @@
           {id:1,name:'vue'}
         ]
       },
-      template:'<div>template<div>',
+      // template:'<div>template<div>',
     })
     // vm._data.address = {...vm._data.address, a:'100'}
     // vm.nums.push(999)

@@ -33,6 +33,6 @@ export function initMixin (Vue) {
       options.render = compileToFunction(template)
     }
     render = options.render
-    console.log('页面挂载:', options);
+    // console.log('页面挂载:', options);
   }
 }
