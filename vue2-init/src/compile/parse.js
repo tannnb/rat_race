@@ -85,6 +85,7 @@ export const parseHTML = (html) => {
 
   function charts(text) {
     let parent = stack[stack.length - 1];
+    text = text.replace(/\s/g, '')
     if(text) {
       parent.children.push({ text,type:3  })
     }
