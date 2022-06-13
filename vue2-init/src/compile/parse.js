@@ -98,6 +98,7 @@ export const parseHTML = (html) => {
   while (html) {
 
     const textEnd = html.indexOf('<')
+
     // 如果遇到< 且值是0，可能是开始标签或结束标签，那么就开始解析出标签名
     if (textEnd === 0) {
       const startTagMatch = parseStartTag() // 一个解析html的库: htmlparse2

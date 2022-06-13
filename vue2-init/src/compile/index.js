@@ -1,5 +1,5 @@
 import { parseHTML } from "./parse"
-
+import { generate } from "./generate"
 
 
 export function compileToFunction(html) {
@@ -7,6 +7,9 @@ export function compileToFunction(html) {
   // 2 优化静态静态节点
   // 3 吧AST变成render
   const ast = parseHTML(html)
+
+
+  const result = generate(ast)
 
   console.log('ast:', ast)
 }
