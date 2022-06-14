@@ -8,8 +8,8 @@ export function compileToFunction(html) {
   // 3 吧AST变成render
   const ast = parseHTML(html)
 
-
+  console.log('ast', ast)
   const result = generate(ast)
 
-  console.log('ast:', ast)
+  console.log('ast:', result)
 }
