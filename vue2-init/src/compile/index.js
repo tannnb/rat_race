@@ -2,14 +2,13 @@ import { parseHTML } from "./parse"
 import { generate } from "./generate"
 
 
-export function compileToFunction(html) {
-  // 1 把模版变成AST语法树
-  // 2 优化静态静态节点
-  // 3 吧AST变成render
+export function compileToFunction (html) {
+  // 把模版变成AST语法树
   const ast = parseHTML(html)
+  const code = generate(ast)
 
-  console.log('ast', ast)
-  const result = generate(ast)
+  // 吧AST变成render
+  const render = new Function(`with(this){return ${code}}`)
 
-  console.log('ast:', result)
+  return render
 }

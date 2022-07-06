@@ -7,18 +7,18 @@
   <title>Document</title>
 </head>
 <body>
-  <div id="app" age=18 name='Tom' style="color:red;background:red">hello {{ kuangjia }} <span>{{time}}</span> </div>
+  <div id="app" age=18 name='Tom' style="color:red;background:red">hello  {{ kuangjia }} <span>{{time}}</span> </div>
   <script src="../dist/vue.js"></script>
   <script>
     var vm = new Vue({
       el:'#app',
       data:{
-        kuangjia:'Vue',
+        kuangjia:'Vue2.0',
         time:'2022',
         id:10000,
         message:'hello Vue',
         address:{
-          room:'CD'
+          room:'CD' 
         },
         nums:[1,2,3,4,5],
         objArrar:[
@@ -30,6 +30,10 @@
     // vm._data.address = {...vm._data.address, a:'100'}
     // vm.nums.push(999)
     // console.log(vm._data);
+    setTimeout(() => {
+      vm.time = '1993'
+      // vm._update(vm._render())
+    },1000)
   </script>
 </body>
 </html>

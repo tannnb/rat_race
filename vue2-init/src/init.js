@@ -1,6 +1,7 @@
 
 import { initState } from "./initState";
 import { compileToFunction } from "./compile/index.js";
+import { mountComponent } from "./liftcycle";
 
 export function initMixin (Vue) {
   Vue.prototype._init = function (options) {
@@ -19,20 +20,23 @@ export function initMixin (Vue) {
   }
   Vue.prototype.$mount = function (el) {
     const vm = this
+    el = document.querySelector(el)
+    vm.$el = el
     const options = vm.$options
-   
+
     let render;
     // 模版使用顺序 render -> template -> outerHTML
     if (!options.render) {
       let template = options.template
       if (!template) {
-        el = document.querySelector(el)
         template = el.outerHTML
       }
       // 模版编译
       options.render = compileToFunction(template)
     }
+
     render = options.render
-    // console.log('页面挂载:', options);
+  
+    mountComponent(vm, el)
   }
 }

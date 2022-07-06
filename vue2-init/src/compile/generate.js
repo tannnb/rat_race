@@ -56,6 +56,6 @@ function genChildren (ast) {
 }
 export function generate (ast) {
   let children = genChildren(ast)
-  let code = `_c("${ast.tag}",${ast.attrs.length ? genProps(ast.attrs) : 'undefined'}${children ? ',' + children : ''})`
+  let code = `_c("${ast.tag}",${ast.attrs.length ? genProps(ast.attrs) : 'undefined'}${children ? ',[' + children + ']' : ''})`
   return code
 }

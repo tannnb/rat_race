@@ -1,10 +1,12 @@
 import {initMixin} from './init'
+import { liftCycleMixin } from './liftcycle'
 
 // 构造函数
 function Vue (options) {
   this._init(options)
 }
 initMixin(Vue)
+liftCycleMixin(Vue)
 
 export default Vue 
 
