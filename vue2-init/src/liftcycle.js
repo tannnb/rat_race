@@ -26,7 +26,6 @@ export function liftCycleMixin (Vue) {
    
     const vm = this;
     let { render } = vm.$options;
-    console.log('render', render)
     let vnode = render.call(vm)
     return vnode;
   }

@@ -25,6 +25,7 @@ export const proto = Object.create(oldArrayPrototype);
         break;
     }
 
+    ob.dep.notify()
     if (inserted) {
       ob.observerArray(inserted)
     }

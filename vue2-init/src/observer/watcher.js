@@ -7,6 +7,8 @@ class Watcher {
     this.id = id++;
     // 将用户传入的fn保存在getter属性上
     this.getter = fn;
+    this.deps = []
+    this.depsId = new Set()
 
     this.get()
   }
@@ -20,6 +22,15 @@ class Watcher {
   }
   update() {
     this.get()
+  }
+
+  addDep(dep) {
+    let id = dep.id;
+    if(!this.depsId.has(id)) {
+      this.depsId.add(id)
+      this.deps.push(dep)
+      dep.addSub(this)
+    }
   }
 
 }

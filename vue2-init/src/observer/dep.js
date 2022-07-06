@@ -6,7 +6,11 @@ class Dep {
     this.subs = []
   }
   depend () {
-    this.subs.push(Dep.target)
+    Dep.target.addDep(this)
+    // this.subs.push(Dep.target)
+  }
+  addSub(watcher) {
+      this.subs.push(watcher)
   }
   notify() {
     this.subs.forEach(watch => watch.update())

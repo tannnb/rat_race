@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">{{arr}}</div>
+  <script src="../dist/vue.js"></script>
+  <script>
+    var vm = new Vue({
+      el:'#app',
+      data:{
+        name:'Vue',
+        arr:[1,2,3]
+      },
+    })
+    setTimeout(() => {
+      vm.arr.push(100)
+    },2000)
+    // 1. 默认内部会将data数据中的数据进行劫持 采用的是defineProperty
+    //2. 如果用户提供了el属性 回去查找有没有tempolate，render 如果没有传递的话 则使用el对应的html作为模版
+    // 3. 拿到模版变成render函数渲染逻辑，当调用render时会进行取值
+    // 4 在创建之前 生成一个渲染watcher，给每个属性增加了一个dep属性，此时会将watch放到全局上，再去调用渲染方法，每个属性对应的dep会收集这个watcher
+    // 5. 如果多个属性多次在模版中取值 我们需要过滤(name)dep -> watcher 我们希望watcher和dep是有关系的
+    // 既：一个dep对应对了watcher 一个watcher对应对应对个dep 多对多的关系
+    // 需要将dep个watcher产生关联，后面的计算属性都是基于dep和watcer的
+  </script>
+</body>
+</html>
