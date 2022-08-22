@@ -58,8 +58,8 @@ function queneWatch (watch) {
     watchId.push(id)
     queue.push(watch)
     if (!penging) {
-      setTimeout(flushShedulerQuenu, 0)
-      penging = teue
+      Promise.resolve().then(flushShedulerQuenu)
+      penging = true
     }
   }
 }
