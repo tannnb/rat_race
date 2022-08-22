@@ -20,13 +20,16 @@ class Watcher {
     this.getter()
     Dep.target = null
   }
-  update() {
+  update () {
+    queneWatch(this)
+  }
+  run () {
     this.get()
   }
 
-  addDep(dep) {
+  addDep (dep) {
     let id = dep.id;
-    if(!this.depsId.has(id)) {
+    if (!this.depsId.has(id)) {
       this.depsId.add(id)
       this.deps.push(dep)
       dep.addSub(this)
@@ -34,5 +37,34 @@ class Watcher {
   }
 
 }
+
+
+let watchId = new Set()
+let penging = false
+let queue = []
+
+function flushShedulerQuenu () {
+  for (let i = 0; i < queneWatch.length; i++) {
+    const watch = queneWatch[i]
+    watch.run()
+  }
+  queue = []
+  watchId.clear()
+  penging = false
+}
+function queneWatch (watch) {
+  const id = watch.id
+  if (!watchId.has(id)) {
+    watchId.push(id)
+    queue.push(watch)
+    if (!penging) {
+      setTimeout(flushShedulerQuenu, 0)
+      penging = teue
+    }
+  }
+}
+
+
+
 
 export default Watcher;
