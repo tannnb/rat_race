@@ -1,11 +1,30 @@
 import './App.css';
-import { useEffect } from 'react';
+import { useEffect, useReducer } from 'react';
 import DataUrl from './components/DataUrl';
+
+
+
+
+
+
+
 
 function App () {
 
+  const [state, dispatch] = useReducer((state, next) => ({ ...state, ...next }), {
+    id: 1,
+    name: '测试一下'
+  })
+
+  useEffect(() => {
+    console.log('id变化了:', state.id)
+  }, [state.id])
+
+  console.log('state', state)
+
   return (
     <div className="App">
+      <button onClick={() => dispatch({ id: state.id + 1 ,name:'测试2'})}>123123</button>
       <DataUrl></DataUrl>
     </div>
   );
@@ -24,3 +43,5 @@ function chunk (array, size = 1) {
   }
   return result
 }
+
+

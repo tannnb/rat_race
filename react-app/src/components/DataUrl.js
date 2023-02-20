@@ -2,7 +2,7 @@ import { useRef } from 'react'
 
 export default function DataUrl () {
   const imgRef = useRef(null)
-  
+
   // 动态构建JS代码方案
   //                                          动态逻辑⬇️
   // <script src="data:application/javascript,alert('hello world')"></script>
@@ -17,10 +17,20 @@ export default function DataUrl () {
     }
     render.readAsDataURL(files)
   }
+
+
+
+
+
   return (
     <>
       <input onChange={handleChange} type="file" />
       <img width='500' ref={imgRef} src="" alt="" />
+      <div>
+        <button onClick={() => {
+          
+        }} >测试一下</button>
+      </div>
     </>
   )
 }
