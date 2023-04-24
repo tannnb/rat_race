@@ -1,4 +1,5 @@
 
+// 模拟一个微任务
 function asyncRun (func) {
   if (typeof Promise !== 'undefined') {
     Promise.resolve().then(func)
@@ -12,4 +13,16 @@ function asyncRun (func) {
   } else {
     setTimeout(func)
   }
+}
+
+
+// 判断是否是奇数
+// a % b
+// => a - b * p   p: a/b的整数部分
+// 例子： 5 % 3 = 5 - 3 * (1) = 2
+function isOdd (n) {
+  if (typeof n !== 'number') {
+    throw new TypeError(`${n} is not a number`)
+  }
+  return n % 2 === 1 || n % 2 === -1;
 }
