@@ -19,7 +19,7 @@ import { RedisModule } from './redis/redis.module';
       password: '123456',
       database: 'login_test',
       synchronize: true,
-      logging: true,
+      logging: false,
       entities: [User, Permission],
       poolSize: 10,
       connectorPackage: 'mysql2',

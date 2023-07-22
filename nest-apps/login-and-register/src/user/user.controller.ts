@@ -8,6 +8,7 @@ import {
   UseGuards,
   ValidationPipe,
   SetMetadata,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { LoginDto } from './dto/login.dto';
@@ -16,7 +17,16 @@ import { JwtService } from '@nestjs/jwt';
 import { Response } from 'express';
 import { LoginGuard } from 'src/login.guard';
 import { PermissionGuard } from './permission.guard';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+@ApiTags('用户模块')
 @Controller('user')
 export class UserController {
   @Inject(UserService)
@@ -31,10 +41,23 @@ export class UserController {
     return '插入成功';
   }
 
-  /**
-   *
-   * @param user 登录
-   */
+  @ApiOperation({ summary: '用户登录', description: '用户登录接口' })
+  @ApiResponse({ status: HttpStatus.OK, description: '操作成功', type: String })
+  @ApiBody({ type: LoginDto })
+  @ApiQuery({
+    name: 'password',
+    type: String,
+    description: '登录密码',
+    required: true,
+    example: '123456',
+  })
+  @ApiQuery({
+    name: 'username',
+    type: String,
+    description: '账号',
+    required: true,
+    example: 'zhangShan',
+  })
   @Post('login')
   async create(
     @Body(ValidationPipe) user: LoginDto,
@@ -56,18 +79,32 @@ export class UserController {
     }
   }
 
-  /**
-   *
-   * @param user 注册用户
-   */
+  @ApiOperation({ summary: '用户注册', description: '用户注册接口' })
+  @ApiResponse({ status: HttpStatus.OK, description: '操作成功', type: String })
+  @ApiBody({ type: RegisterDto })
+  @ApiQuery({
+    name: 'password',
+    type: String,
+    description: '登录密码',
+    required: true,
+  })
+  @ApiQuery({
+    name: 'username',
+    type: String,
+    description: '账号',
+    required: true,
+  })
   @Post('register')
   async register(@Body(ValidationPipe) user: RegisterDto) {
     return await this.userService.register(user);
   }
 
+  @ApiOperation({ summary: '获取用户信息', description: '获取用户信息详情' })
+  @ApiResponse({ status: HttpStatus.OK, description: '操作成功', type: String })
+  @ApiBearerAuth('bearer')
   @Get('getUser')
   @UseGuards(LoginGuard, PermissionGuard)
-  @SetMetadata('permission', 'create')
+  @SetMetadata('permission', 'remove')
   getUserInfo() {
     return '获取用户信息1';
   }

@@ -41,11 +41,12 @@ export class PermissionGuard implements CanActivate {
       `user_${username}_permissions`,
     );
 
-    console.log(permissions);
+    console.log('1', permissions);
 
     if (permissions.length === 0) {
       const foundUser = await this.userService.findByUsername(username);
       permissions = foundUser.permissions.map((item) => item.name);
+      console.log('permissions', permissions);
       this.redisService.listSet(
         `user_${username}_permissions`,
         permissions,
@@ -54,6 +55,8 @@ export class PermissionGuard implements CanActivate {
     }
 
     const permission = this.reflector.get('permission', context.getHandler());
+    console.log('2', permission);
+
     if (permissions.some((item) => item === permission)) {
       return true;
     } else {

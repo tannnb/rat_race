@@ -7,7 +7,6 @@ export class RedisService {
   private redisClient: RedisClientType;
 
   async listGet(key: string) {
-    console.log('key', key);
     return await this.redisClient.lRange(key, 0, -1);
   }
   async listSet(key: string, list: Array<string>, ttl?: number) {
