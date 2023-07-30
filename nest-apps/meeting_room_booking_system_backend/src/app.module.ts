@@ -3,45 +3,31 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
-import { User } from './user/entities/user.entity';
-import { Permission } from './user/entities/permission.entity';
-import { JwtModule } from '@nestjs/jwt';
+import { User } from './user/entities/User.entity';
+import { Role } from './user/entities/Role.entity';
+import { Permission } from './user/entities/Permission.entity';
 import { RedisModule } from './redis/redis.module';
-import { ConfigModule } from '@nestjs/config';
-import config from './config';
+
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      load: [config],
-    }),
-    // 连接Mysql
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',
       port: 3306,
       username: 'root',
       password: '123456',
-      database: 'login_test',
+      database: 'meeting_room_booking_system',
       synchronize: true,
-      logging: false,
-      entities: [User, Permission],
+      logging: true,
+      entities: [User, Role, Permission],
       poolSize: 10,
       connectorPackage: 'mysql2',
       extra: {
         authPlugin: 'sha256_password',
       },
     }),
-    // 注册jwt服务
-    JwtModule.register({
-      global: true,
-      secret: 'slat',
-      signOptions: {
-        expiresIn: '7d',
-      },
-    }),
-    RedisModule,
-
     UserModule,
+    RedisModule,
   ],
   controllers: [AppController],
   providers: [AppService],

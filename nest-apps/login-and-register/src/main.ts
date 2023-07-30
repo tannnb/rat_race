@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as path from 'path';
+import { TransformInterceptor } from './transform-interceptor.interceptor';
 import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
@@ -10,6 +11,9 @@ async function bootstrap() {
     cors: true,
   });
   // app.enableCors();
+
+  // 注册全局数据格式转换
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   // 配置静态文件资源
   app.useStaticAssets(path.join(__dirname, '..', 'public'), {

@@ -1,3 +1,4 @@
+import { Permission } from './user/entities/permission.entity';
 import {
   CanActivate,
   ExecutionContext,
@@ -8,6 +9,15 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
 import { Request } from 'express';
+
+declare module 'express' {
+  interface Request {
+    user: {
+      username: string;
+      Permission: string[];
+    };
+  }
+}
 
 @Injectable()
 export class LoginGuard implements CanActivate {
@@ -23,10 +33,10 @@ export class LoginGuard implements CanActivate {
     if (!bearer || bearer.length < 2) {
       throw new UnauthorizedException('token错误');
     }
-    const token = bearer[1];
     try {
+      const token = bearer[1];
       const info = this.jwtService.verify(token);
-      (request as any).user = info.user;
+      request.user = info.user;
       return true;
     } catch (error) {
       throw new UnauthorizedException('token已失效，请重新登录');
