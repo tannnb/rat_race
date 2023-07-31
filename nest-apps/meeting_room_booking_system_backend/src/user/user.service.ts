@@ -11,7 +11,6 @@ import { Repository } from 'typeorm';
 import { RegisterUserDto } from './dto/register.dot';
 import { RedisService } from 'src/redis/redis.service';
 import { md5 } from 'src/utils';
-import { log } from 'console';
 
 @Injectable()
 export class UserService {
