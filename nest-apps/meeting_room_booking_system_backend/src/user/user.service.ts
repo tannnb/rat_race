@@ -38,17 +38,17 @@ export class UserService {
     const user1 = new User();
     user1.username = 'tannnb';
     user1.password = md5('123456');
-    user1.email = '976275430@qq.com';
+    user1.email = '123456@qq.com';
     user1.isAdmin = true;
-    user1.nickName = '谭兵';
-    user1.phoneNumber = '17628284253';
+    user1.nickName = '兵乓';
+    user1.phoneNumber = '17600001234';
 
     const user2 = new User();
     user2.username = 'zhangsan';
     user2.password = md5('123456');
-    user2.email = '976275430@qq.com';
+    user2.email = '123456@qq.com';
     user2.nickName = '张三';
-    user2.phoneNumber = '17628284253';
+    user2.phoneNumber = '17600001234';
 
     const role1 = new Role();
     role1.name = '管理员';
