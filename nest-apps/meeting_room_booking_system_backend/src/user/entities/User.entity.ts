@@ -27,7 +27,7 @@ export class User {
   email: string;
 
   @Column({
-    length: 100,
+    length: 256,
     comment: '头像',
     nullable: true,
   })

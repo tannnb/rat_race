@@ -4,9 +4,6 @@ import { createTransport, Transporter } from 'nodemailer';
 
 @Injectable()
 export class EmailService {
-  // @Inject(ConfigService)
-  // private configService: ConfigService;
-
   transporter: Transporter;
 
   constructor(private configService: ConfigService) {
