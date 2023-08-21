@@ -17,6 +17,7 @@ import { Permission } from './entities/Permission.entity';
 import { LoginUserVo } from './vo/login-user.vo';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { log } from 'console';
 
 @Injectable()
 export class UserService {
@@ -227,5 +228,47 @@ export class UserService {
       this.logger.error(error, UserService);
       return '用户信息修改失败';
     }
+  }
+
+  async freezeUserById(userId: number) {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    user.isFrozen = !user.isFrozen;
+    await this.userRepository.save(user);
+  }
+
+  async findUsersByPage(
+    pageNo: number,
+    pageSize: number,
+    username: string,
+    nickName: string,
+    email: string,
+  ) {
+    const skipCount = (pageNo - 1) * pageSize;
+    const condition: Record<string, any> = {};
+    if (username) {
+      condition.username = username;
+    }
+    if (nickName) {
+      condition.nickName = nickName;
+    }
+    if (email) {
+      condition.email = email;
+    }
+    const [users, totalCount] = await this.userRepository.findAndCount({
+      select: [
+        'id',
+        'username',
+        'nickName',
+        'email',
+        'phoneNumber',
+        'isFrozen',
+        'avatar',
+        'createTime',
+      ],
+      skip: skipCount,
+      take: pageSize,
+      where: condition,
+    });
+    return { users, totalCount };
   }
 }
