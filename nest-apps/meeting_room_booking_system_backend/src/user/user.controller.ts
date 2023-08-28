@@ -27,6 +27,7 @@ import { generateParseIntPipe } from 'src/utils';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiOperation,
   ApiQuery,
   ApiResponse,
   ApiTags,
@@ -57,6 +58,7 @@ export class UserController {
     return '数据初始化成功';
   }
 
+  @ApiOperation({ summary: '用户注册' })
   @ApiBody({
     type: RegisterUserDto,
   })
@@ -75,6 +77,7 @@ export class UserController {
     return await this.userService.register(registerUser);
   }
 
+  @ApiOperation({ summary: '注册验证码' })
   @ApiQuery({
     name: 'address',
     type: String,
@@ -99,6 +102,7 @@ export class UserController {
     return '发送成功';
   }
 
+  @ApiOperation({ summary: '用户登录' })
   @ApiBody({
     type: LoginUserDto,
   })
@@ -121,6 +125,7 @@ export class UserController {
     return userVo;
   }
 
+  @ApiOperation({ summary: '管理员登录' })
   @ApiBody({
     type: LoginUserDto,
   })
@@ -143,6 +148,7 @@ export class UserController {
     return userVo;
   }
 
+  @ApiOperation({ summary: '刷新Token' })
   @ApiQuery({
     name: 'refreshToken',
     type: String,
@@ -178,6 +184,7 @@ export class UserController {
     }
   }
 
+  @ApiOperation({ summary: '刷新admin,Token' })
   @ApiQuery({
     name: 'refreshToken',
     type: String,
@@ -211,6 +218,7 @@ export class UserController {
     }
   }
 
+  @ApiOperation({ summary: '用户信息' })
   @ApiBearerAuth()
   @ApiResponse({
     status: HttpStatus.OK,
@@ -233,6 +241,7 @@ export class UserController {
     return userVO;
   }
 
+  @ApiOperation({ summary: '修改密码' })
   @ApiBearerAuth()
   @ApiBody({
     type: UpdateUserPasswordDto,
@@ -250,6 +259,7 @@ export class UserController {
     return await this.userService.updatePassword(userId, passwordDto);
   }
 
+  @ApiOperation({ summary: '密码验证码' })
   @ApiBearerAuth()
   @ApiQuery({
     name: 'address',
@@ -277,6 +287,7 @@ export class UserController {
     return '发送成功';
   }
 
+  @ApiOperation({ summary: '用户信息更新' })
   @ApiBearerAuth()
   @ApiBody({
     type: UpdateUserDto,
@@ -299,6 +310,7 @@ export class UserController {
     return await this.userService.update(userId, updateUserDto);
   }
 
+  @ApiOperation({ summary: '冻结用户' })
   @ApiBearerAuth()
   @ApiQuery({
     name: 'id',
@@ -315,6 +327,7 @@ export class UserController {
     return 'success';
   }
 
+  @ApiOperation({ summary: '用户列表', description: '用户列表接口' })
   @ApiBearerAuth()
   @ApiQuery({
     name: 'pageNo',
