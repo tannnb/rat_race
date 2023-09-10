@@ -15,7 +15,7 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ length: 50, comment: '用户名' })
+  @Column({ length: 50, comment: '用户名', unique: true })
   username: string;
 
   @Column({ length: 50, comment: '密码' })
