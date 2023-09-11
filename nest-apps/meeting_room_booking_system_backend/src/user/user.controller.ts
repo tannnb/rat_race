@@ -280,6 +280,28 @@ export class UserController {
     return '发送成功';
   }
 
+  @ApiBearerAuth()
+  @ApiResponse({
+    type: String,
+    description: '发送成功',
+  })
+  @RequireLogin()
+  @Get('update/captcha')
+  async updateCaptcha(@UserInfoQuery('email') address: string) {
+    const code = Math.random().toString().slice(2, 8);
+    await this.redisService.setKey(
+      `update_user_captcha_${address}`,
+      code,
+      10 * 60,
+    );
+    await this.emailServer.sendMail({
+      to: address,
+      subject: '更改用户信息验证码',
+      html: `<p>你的更验证码是 ${code}</p>`,
+    });
+    return '发送成功';
+  }
+
   @ApiOperation({ summary: '用户信息更新' })
   @ApiBearerAuth()
   @ApiBody({
@@ -379,6 +401,7 @@ export class UserController {
           userId: vo.userInfo.id,
           username: vo.userInfo.username,
           roles: vo.userInfo.roles,
+          email: vo.userInfo.email,
           permissions: vo.userInfo.permissions,
         },
         {
@@ -405,6 +428,7 @@ export class UserController {
           userId: vo.id,
           username: vo.username,
           roles: vo.roles,
+          email: vo.email,
           permissions: vo.permissions,
         },
         {

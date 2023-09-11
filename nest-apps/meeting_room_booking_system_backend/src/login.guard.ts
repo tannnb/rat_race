@@ -10,13 +10,12 @@ import { Request } from 'express';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Permission } from './user/entities/Permission.entity';
-import { log } from 'console';
-import { UnLoginException } from './unlogin.filter';
 
 interface JwtUserData {
   userId: number;
   username: string;
   roles: string[];
+  email: string;
   permissions: Permission[];
 }
 
@@ -62,6 +61,7 @@ export class LoginGuard implements CanActivate {
         userId: data.userId,
         username: data.username,
         roles: data.roles,
+        email: data.email,
         permissions: data.permissions,
       };
       return true;
