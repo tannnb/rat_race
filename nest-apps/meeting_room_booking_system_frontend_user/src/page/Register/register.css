@@ -1,0 +1,16 @@
+
+.login-container {
+  padding: 100px 30% 0 30%;
+}
+.title {
+  text-align: center;
+}
+.link-conatiner {
+  display: flex;
+  justify-content: space-between;
+}
+
+.captcha .ant-form-item-control-input-content {
+  display: flex;
+  justify-content: space-between
+}

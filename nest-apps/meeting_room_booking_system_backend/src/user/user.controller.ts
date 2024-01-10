@@ -1,5 +1,6 @@
 import { JwtService } from '@nestjs/jwt';
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -8,7 +9,12 @@ import {
   Post,
   Query,
   UnauthorizedException,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import * as path from 'path';
+import * as fs from 'fs';
+import * as multer from 'multer';
 import { ConfigService } from '@nestjs/config';
 import { UserService } from './user.service';
 import { EmailService } from 'src/email/email.service';
@@ -33,6 +39,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { RefreshTokenVo } from './vo/refresh-token.vo';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('用户管理模块')
 @Controller('user')
@@ -235,6 +242,7 @@ export class UserController {
     userVO.username = user.username;
     userVO.nickName = user.nickName;
     userVO.avatar = user.avatar;
+    userVO.email = user.email;
     userVO.phoneNumber = user.avatar;
     userVO.createTime = user.createTime;
     userVO.isFrozen = user.isFrozen;
@@ -384,6 +392,7 @@ export class UserController {
     @Query('username') username: string,
     @Query('nickName') nickName: string,
     @Query('email') email: string,
+    @UserInfoQuery('userId') userId: number,
   ) {
     return await this.userService.findUsersByPage(
       pageNo,
@@ -391,7 +400,41 @@ export class UserController {
       username,
       nickName,
       email,
+      userId,
     );
+  }
+
+  @Post('upload')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      dest: 'uploads',
+      storage: multer.diskStorage({
+        destination: (req, file, callback) => {
+          try {
+            fs.mkdirSync('uploads');
+          } catch (e) {}
+          callback(null, 'uploads');
+        },
+        filename: (req, file, callback) => {
+          callback(null, file.originalname);
+        },
+      }),
+      limits: {
+        fileSize: 1024 * 1024 * 3,
+      },
+      fileFilter(req, file, callback) {
+        const extname = path.extname(file.originalname);
+        if (['.png', '.jpg', '.gif', '.java'].includes(extname)) {
+          callback(null, true);
+        } else {
+          callback(new BadRequestException('只能上传图片'), false);
+        }
+      },
+    }),
+  )
+  uploadFile(@UploadedFile() file: Express.Multer.File) {
+    console.log('file', file);
+    return file.path;
   }
 
   normalizeToken(vo: LoginUserVo) {

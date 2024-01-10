@@ -4,12 +4,12 @@ import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FormatResponseInterceptor } from './format-response.interceptor';
 import { InvokeRecordInterceptor } from './invoke-record.interceptor';
-import { UnloginFilter } from './unlogin.filter';
 import { CustomExceptionFilter } from './custom-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { NestExpressApplication } from '@nestjs/platform-express';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     cors: true,
   });
 
@@ -28,6 +28,9 @@ async function bootstrap() {
   // app.useGlobalFilters(new UnloginFilter());
   // 自定义异常捕获
   app.useGlobalFilters(new CustomExceptionFilter());
+
+  // 静态文件目录
+  app.useStaticAssets('uploads', { prefix: '/uploads' });
 
   const config = new DocumentBuilder()
     .setTitle('会议预定系统')

@@ -11,11 +11,13 @@ export class CustomExceptionFilter implements ExceptionFilter {
   catch(exception: HttpException, host: ArgumentsHost) {
     const response: Response = host.switchToHttp().getResponse<Response>();
 
+    const res = exception.getResponse() as { message: string[] };
+    // console.log('exception', exception);
     response
       .json({
         code: exception.getStatus(),
         message: 'fail',
-        data: exception.message,
+        data: res?.message?.join ? res?.message?.join(',') : exception.message,
       })
       .end();
   }

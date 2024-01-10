@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { User } from './entities/User.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Like, Not, Repository } from 'typeorm';
 import { RegisterUserDto } from './dto/register.dot';
 import { RedisService } from 'src/redis/redis.service';
 import { md5 } from 'src/utils';
@@ -115,10 +115,12 @@ export class UserService {
       },
       relations: ['roles', 'roles.permissions'],
     });
-    console.log('user', loginUserDto, user);
+
     if (!user) {
+      console.log('user1', user);
       throw new HttpException('用户不存在', HttpStatus.BAD_REQUEST);
     }
+
     if (user.password !== md5(loginUserDto.password)) {
       throw new HttpException('密码错误', HttpStatus.BAD_REQUEST);
     }
@@ -144,6 +146,7 @@ export class UserService {
         return arr;
       }, []),
     };
+    console.log('vo2', vo);
     return vo;
   }
 
@@ -180,7 +183,6 @@ export class UserService {
   }
 
   async updatePassword(passwordDto: UpdateUserPasswordDto) {
-    console.log('passwordDto', passwordDto);
     const captcha = await this.redisService.getKey(
       `update_password_captcha_${passwordDto.email}`,
     );
@@ -253,18 +255,23 @@ export class UserService {
     username: string,
     nickName: string,
     email: string,
+    userId: number,
   ) {
     const skipCount = (pageNo - 1) * pageSize;
-    const condition: Record<string, any> = {};
+    const condition: FindOptionsWhere<Record<string, any>> = {
+      id: Not(userId),
+    };
+
     if (username) {
-      condition.username = username;
+      condition.username = Like(`%${username}%`);
     }
     if (nickName) {
-      condition.nickName = nickName;
+      condition.nickName = Like(`%${nickName}%`);
     }
     if (email) {
-      condition.email = email;
+      condition.email = Like(`%${email}%`);
     }
+
     const [users, totalCount] = await this.userRepository.findAndCount({
       select: [
         'id',
